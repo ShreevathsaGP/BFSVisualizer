@@ -316,7 +316,7 @@ class BreadthFirst {
         this.visited_old = [] // For visualization when there is no path available
     }
 
-    async search() {
+    search() {
         while(this.is_end(this.path) === false) {
 
             // I AM TOO LAZY TO FIX PROBLEM, SO I LEAVE IT LIKE THIS
