@@ -6,6 +6,10 @@ const solve_button = document.getElementById("calculate-button");
 
 errorMessage("This is where error messages will appear!")
 
+
+//-----------------------------------------------------------------------------------------------------------------------------------------------
+// all non algorithmic functions that make the viruals of the page
+//-----------------------------------------------
 function MakeGrid(rows, columns) {
     this.columns = columns;
     this.rows = rows;
@@ -46,6 +50,7 @@ function MakeGrid(rows, columns) {
 
 }
 MakeGrid(rows, columns)
+//-----------------------------------------------
 
 // Array to track node movemenet
 start_visited = [] // All nodes visited by start node movement (will chose last one!)
@@ -59,6 +64,8 @@ var isRegularClicked = false;
 var isStartClicked = {'state':false, 'source':''}
 var isFinishClicked = {'state':false, 'source':''};
 
+
+//-----------------------------------------------
 function EditGrid() {
     // Reset lists
     start_visited.length = 0;
@@ -77,6 +84,7 @@ function EditGrid() {
     });
 
     // Regular node & Wall node
+    //-----------------------------------------------
     function RegularNode() {
         $(".regular-node").mousedown(function() {
             if (isUnderGo) {
@@ -106,7 +114,9 @@ function EditGrid() {
             RegularNode() // Refresh list
         }
     })
+    //-----------------------------------------------
 
+    //-----------------------------------------------
     // Start node
     function StartNode() {
         $(".start-node").mousedown(function() {
@@ -123,7 +133,9 @@ function EditGrid() {
             }
         })
     }
+    //-----------------------------------------------
 
+    //-----------------------------------------------
     // Finish node
     function FinishNode() {
         $(".finish-node").mousedown(function() {
@@ -140,7 +152,9 @@ function EditGrid() {
             }
         })
     }
+    //-----------------------------------------------
 
+    //-----------------------------------------------
     // Mouse up
     $("td").mouseup(function() {
         if (isUnderGo) {
@@ -152,7 +166,9 @@ function EditGrid() {
             FinishNode() // Refresh list
         }
     })
+    //-----------------------------------------------
 
+    //-----------------------------------------------
     $("td").mouseenter(function() {
         if(isUnderGo) {
             //pass
@@ -202,8 +218,10 @@ function EditGrid() {
         }
 
     });
+    //-----------------------------------------------
 }
 EditGrid()
+//-----------------------------------------------
 
 // Pathfinding status
 var isProcessing = false;
@@ -235,6 +253,8 @@ solve_button.onclick = function() {
 // Maze holder
 var maze = []
 
+
+//-----------------------------------------------
 function ComputeGrid() {
     if (document.getElementById('algo-choice').value === 'choose'){
         errorMessage("please choose a valid algorithm!")
@@ -273,32 +293,49 @@ function ComputeGrid() {
     }
     
 };
+//-----------------------------------------------
 
+
+//-----------------------------------------------
 // Display an error with the user's actions
 function errorMessage(message) {
     document.getElementById('error-box').innerHTML = `<p id="error">${message}</p>`
 }
+//-----------------------------------------------
+//-----------------------------------------------------------------------------------------------------------------------------------------------
 
+
+//-----------------------------------------------------------------------------------------------------------------------------------------------
 class AStar {
     constructor(maze, ms) {
         this.maze = maze;
         this.queue = [];
         this.speed = ms;
     }
-}
 
+    search() {
+        console.log(this.maze);
+    }
+}
+//-----------------------------------------------------------------------------------------------------------------------------------------------
+
+
+//-----------------------------------------------------------------------------------------------------------------------------------------------
 class DepthFirst {
     constructor(maze, ms) {
         this.maze = maze;
         this.queue = [];
         this.speed = ms;
     }
-    async search() {
-        console.log(this.maze)
 
+    search() {
+        // pass
     }
 }
+//-----------------------------------------------------------------------------------------------------------------------------------------------
 
+
+//-----------------------------------------------------------------------------------------------------------------------------------------------
 class BreadthFirst {
     constructor(maze_in, ms) {
         this.maze = maze_in;
@@ -312,10 +349,11 @@ class BreadthFirst {
         this.start_node = this.maze[this.maze.findIndex(x => x.node_type === 'start')].node_pos;
         this.finish_node = this.maze[this.maze.findIndex(x => x.node_type === 'finish')].node_pos;
 
-        this.iteration = 0 // Used to see if path does not exist
+        this.iteration = 0; // Used to see if path does not exist
         this.visited_old = [] // For visualization when there is no path available
     }
 
+    //-----------------------------------------------
     search() {
         while(this.is_end(this.path) === false) {
 
@@ -356,7 +394,9 @@ class BreadthFirst {
             this.queue.shift(); // Removes first value from the queue, which is how queues work. FIFO (First In First Out)
         }
     }
+    //-----------------------------------------------
 
+    //-----------------------------------------------
     validate (path) {
         this.path = path
 
@@ -391,7 +431,9 @@ class BreadthFirst {
             return true
         }
     }
+    //-----------------------------------------------
 
+    //-----------------------------------------------
     is_end(path) {
         this.path = path;
         
@@ -428,10 +470,13 @@ class BreadthFirst {
         }
         return false
     }
-    
+    //-----------------------------------------------
 }
+//-----------------------------------------------------------------------------------------------------------------------------------------------
 
-//---------------------------------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------
 // Function to visualize path
 async function visualize_path(path, sleep_time, start, finish) {
     path_ids = [start];
@@ -484,7 +529,9 @@ async function visualize_path(path, sleep_time, start, finish) {
         }  
     }
 }
+//-----------------------------------------------
 
+//-----------------------------------------------
 // Function to visualize the search (all the nodes being searched)
 async function visualize_search(visited_nodes, sleep_time, path, start_node, finish_node, visualize_instruction) {
     this.visited_nodes = visited_nodes;
@@ -513,12 +560,12 @@ async function visualize_search(visited_nodes, sleep_time, path, start_node, fin
         //pass
     }
 }
-//---------------------------------------------------------------------------------------------------
- 
+//-----------------------------------------------
 
-//---------------------------------------------------------
-// Sleep for time --> mill-seconds (ms)
+//-----------------------------------------------
+// Sleep for time --> milli-seconds (ms)
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
-  }
-//---------------------------------------------------------
+}
+//-----------------------------------------------
+//-----------------------------------------------------------------------------------------------------------------------------------------------
