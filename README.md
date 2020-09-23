@@ -18,5 +18,5 @@ This web application utilizes:
 </ul>
 <br>
 Screenshots of web application:
-<img src='git_images/top.png'>
-<img src='git_images/bottom.png'>
+<img src='git_images/before.png'>
+<img src='git_images/after.png'>
