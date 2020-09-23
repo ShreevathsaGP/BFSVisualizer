@@ -324,13 +324,123 @@ class AStar {
 class DepthFirst {
     constructor(maze, ms) {
         this.maze = maze;
-        this.queue = [];
-        this.speed = ms;
+        this.queue = [""];
+        this.speed = ms; // speed search visualization
+        this.directions = ["l", "r", "u", "d"]; // order in which a path is extended (remember newest found valid path is appended to front)
+        this.visited = [] // array to avoid repeated extension of already extended paths
+
+        this.path = ""; // our current best path
+
+        this.start_node = this.maze[this.maze.findIndex(x => x.node_type === 'start')].node_pos; // start node
+        this.end_node = this.maze[this.maze.findIndex(x => x.node_type === 'finish')].node_pos; // end node
+
+        this.iteration = 0; // counting iterations 
+        this.visited_old = [];
+
     }
 
+    //-----------------------------------------------
     search() {
-        // pass
+        while(this.is_end(this.path) === false) {
+            if (this.queue.length === 0) {
+                this.queue.push("");
+            }
+
+            this.path_main = this.queue[0] // last value in queue
+
+            for (let i = 0; i < this.directions.length; i++) {
+                this.try_path = this.path_main + this.directions[i];
+                if (this.validate(this.try_path)) {
+                    this.queue.unshift(this.try_path); // append to the beginning of the queue
+                } else {
+                    //pass
+                }
+            }
+            
+            console.log(this.queue)
+            this.queue.pop(); // Removes last value from array
+            console.log(this.queue)
+        }
     }
+    //-----------------------------------------------
+
+    //-----------------------------------------------
+    validate (path) {
+        this.path = path
+
+        this.validate_node = this.start_node;
+
+        for (let i = 0; i < this.path.length; i++) {
+            if (this.path[i] === "l") {
+                this.validate_node = [this.validate_node[0], this.validate_node[1]-1]
+            } else if (this.path[i] === "r") {
+                this.validate_node = [this.validate_node[0], this.validate_node[1]+1]
+            } else if (this.path[i] === "u") {
+                this.validate_node = [this.validate_node[0]-1, this.validate_node[1]]
+            } else if (this.path[i] === "d") {
+                this.validate_node = [this.validate_node[0]+1, this.validate_node[1]]
+            } else {
+                console.log("Incorrect directions in path!")
+            }
+        }
+
+        // If node already extended, dont do it again
+        if (this.visited.findIndex(x => JSON.stringify(x) === JSON.stringify(this.validate_node)) !== -1) {
+            //console.log('exists')
+            this.visited.push(this.validate_node);
+            return false
+        } else {
+            this.visited.push(this.validate_node);
+        }
+
+        if (this.maze.findIndex(x => JSON.stringify(x.node_pos) === JSON.stringify(this.validate_node)) === -1 || this.maze[this.maze.findIndex(x => JSON.stringify(x.node_pos) === JSON.stringify(this.validate_node))].node_type === 'wall') {
+            return false
+        } else {
+            return true
+        }
+    }
+    //-----------------------------------------------
+
+    //-----------------------------------------------
+    is_end(path) {
+        this.path = path;
+        
+        this.validate_node = this.start_node;
+
+        for (let i = 0; i < this.path.length; i++) {
+            if (this.path[i] === "l") {
+                this.validate_node = [this.validate_node[0], this.validate_node[1]-1]
+            } else if (this.path[i] === "r") {
+                this.validate_node = [this.validate_node[0], this.validate_node[1]+1]
+            } else if (this.path[i] === "u") {
+                this.validate_node = [this.validate_node[0]-1, this.validate_node[1]]
+            } else if (this.path[i] === "d") {
+                this.validate_node = [this.validate_node[0]+1, this.validate_node[1]]
+            } else {
+                console.log("Incorrect directions in path!")
+            }
+        }
+
+        // if the node is not on the canvas then false
+        if (this.maze.findIndex(x => JSON.stringify(x.node_pos) === JSON.stringify(this.validate_node)) === -1) {
+            return false
+        }
+
+        // if the node is the finish (final) node then return true
+        if (this.maze[this.maze.findIndex(x => JSON.stringify(x.node_pos) === JSON.stringify(this.validate_node))].node_type === 'finish') {
+            
+            // Visualize the search and then show the path that was found
+            visualize_search(this.visited, this.sleep, this.path, this.start_node, this.finish_node, true);
+            
+            isUnderGo = false;
+            isProcessing = false;
+            this.maze = NaN;
+            maze.length = 0;
+            return true
+        }
+        return false
+    }
+    //-----------------------------------------------
 }
 //-----------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -453,10 +563,12 @@ class BreadthFirst {
             }
         }
 
+        // if the node is not on the canvas then false
         if (this.maze.findIndex(x => JSON.stringify(x.node_pos) === JSON.stringify(this.validate_node)) === -1) {
             return false
         }
 
+        // if the node is the finish (final) node then return true
         if (this.maze[this.maze.findIndex(x => JSON.stringify(x.node_pos) === JSON.stringify(this.validate_node))].node_type === 'finish') {
             
             // Visualize the search and then show the path that was found
