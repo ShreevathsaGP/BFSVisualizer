@@ -1,6 +1,5 @@
 # BFSVisualizer
-
-<h2 align='center'><strongBreadth First Search Visualizer</strong></h2>
+<h2 align='center'><strong>Breadth First Search Visualizer</strong></h2>
 <em>Here is the link to the website --> <a href='https://visual-pathfinder.herokuapp.com/#chart_div_3'>visual-pathfinder.herokuapp.com</a></em><br>
 <br>
 You have the ability to:<br>
